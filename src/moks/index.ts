@@ -1,0 +1,93 @@
+export const users = [
+    {
+        "_id": "6731e52d1f4a27a00fc9cb8d",
+        "isActive": false,
+        "balance": "$3,078.57",
+        "age": 39,
+        "eyeColor": "blue",
+        "name": "Dona Slater",
+        "gender": "female",
+        "company": "HYDROCOM",
+        "email": "donaslater@hydrocom.com",
+        "phone": "+1 (857) 434-2099",
+        "address": "600 Sutton Street, Cloverdale, Alabama, 8937"
+    },
+    {
+        "_id": "6731e52d4cb89c075a0c714d",
+        "isActive": false,
+        "balance": "$3,153.94",
+        "age": 33,
+        "eyeColor": "brown",
+        "name": "Michelle Shelton",
+        "gender": "female",
+        "company": "KOFFEE",
+        "email": "michelleshelton@koffee.com",
+        "phone": "+1 (881) 475-3569",
+        "address": "887 Essex Street, Klagetoh, Idaho, 4003"
+    },
+    {
+        "_id": "6731e52d3296820f347555be",
+        "isActive": false,
+        "balance": "$2,519.44",
+        "age": 26,
+        "eyeColor": "brown",
+        "name": "Carson Bender",
+        "gender": "male",
+        "company": "QUARMONY",
+        "email": "carsonbender@quarmony.com",
+        "phone": "+1 (856) 476-2764",
+        "address": "303 Jardine Place, Lydia, Texas, 559"
+    },
+    {
+        "_id": "6731e52dccfcbd77b81a1f72",
+        "isActive": false,
+        "balance": "$1,914.95",
+        "age": 39,
+        "eyeColor": "green",
+        "name": "Palmer Horn",
+        "gender": "male",
+        "company": "ZORROMOP",
+        "email": "palmerhorn@zorromop.com",
+        "phone": "+1 (862) 400-3820",
+        "address": "928 Landis Court, Springdale, Virgin Islands, 4503"
+    },
+    {
+        "_id": "6731e52d9c22ee21fc4991fa",
+        "isActive": false,
+        "balance": "$3,433.61",
+        "age": 39,
+        "eyeColor": "green",
+        "name": "Ellen Hansen",
+        "gender": "female",
+        "company": "GALLAXIA",
+        "email": "ellenhansen@gallaxia.com",
+        "phone": "+1 (955) 459-2900",
+        "address": "420 Jackson Street, Diaperville, New Mexico, 2063"
+    },
+    {
+        "_id": "6731e52d871670e673266e8b",
+        "isActive": true,
+        "balance": "$3,000.81",
+        "age": 35,
+        "eyeColor": "green",
+        "name": "Graves Robinson",
+        "gender": "male",
+        "company": "QUINEX",
+        "email": "gravesrobinson@quinex.com",
+        "phone": "+1 (997) 464-3861",
+        "address": "848 Bragg Court, Edgar, American Samoa, 4873"
+    },
+    {
+        "_id": "6731e52dae0e4833bc5e8381",
+        "isActive": false,
+        "balance": "$2,000.36",
+        "age": 30,
+        "eyeColor": "green",
+        "name": "Sears Lyons",
+        "gender": "male",
+        "company": "TUBALUM",
+        "email": "searslyons@tubalum.com",
+        "phone": "+1 (921) 410-3395",
+        "address": "292 Cumberland Walk, Dixie, Oklahoma, 9433"
+    }
+]
