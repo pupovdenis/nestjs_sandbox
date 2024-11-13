@@ -3,6 +3,7 @@ import {InjectModel} from "@nestjs/sequelize";
 import {User} from "./models/user.model";
 import * as bcrypt from "bcrypt";
 import {CreateUserDto, UpdateUserDto} from "./dto";
+import {Watchlist} from "../watchlist/models/watchlist.model";
 
 @Injectable()
 export class UserService {
@@ -12,6 +13,18 @@ export class UserService {
 
     async encrypt(password) {
         return bcrypt.hash(password, 10);
+    }
+
+    async getPublicUser(email: string) {
+        return await this.userRepository.findOne({
+            rejectOnEmpty: undefined,
+            where: {email},
+            attributes: {exclude: ["password"]},
+            include: {
+                model: Watchlist,
+                required: false
+            }
+        });
     }
 
     async createUser(dto): Promise<CreateUserDto> {
