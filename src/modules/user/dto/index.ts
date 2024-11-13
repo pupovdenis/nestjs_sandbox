@@ -22,3 +22,21 @@ export class CreateUserDto {
     @IsEmail()
     email: string
 }
+
+export class UpdateUserDto {
+    @ApiProperty()
+    @IsString()
+    firstname: string
+
+    @ApiProperty()
+    @IsString()
+    lastname: string
+
+    @ApiProperty()
+    @IsString()
+    login: string
+
+    @ApiProperty()
+    @IsEmail()
+    email: string
+}
