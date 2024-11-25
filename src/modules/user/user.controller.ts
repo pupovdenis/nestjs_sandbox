@@ -17,7 +17,7 @@ export class UserController {
         const user = request.user;
         console.log("user from request: ", user)
         console.log("dto from body: ", dto)
-        return this.userService.updateUser(user.email, dto);
+        return this.userService.updateUser(user.id, dto);
     }
 
     @ApiTags("API")

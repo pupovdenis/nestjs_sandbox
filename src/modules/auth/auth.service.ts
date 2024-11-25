@@ -5,6 +5,7 @@ import {AppError} from "../../common/constants/errors";
 import {UserLoginDto} from "./dto";
 import * as bcrypt from "bcrypt";
 import {TokenService} from "../token/token.service";
+import {AuthUserResponse} from "./response";
 
 @Injectable()
 export class AuthService {
@@ -14,24 +15,32 @@ export class AuthService {
     }
 
     async registerUser(dto: CreateUserDto): Promise<CreateUserDto> {
-        const user = await this.userService.findUserByEmail(dto.email);
-        if (user) {
-            throw new BadRequestException(AppError.USER_EXIST);
+        try {
+            const user = await this.userService.findUserByEmail(dto.email);
+            if (user) {
+                throw new BadRequestException(AppError.USER_EXIST);
+            }
+            return this.userService.createUser(dto);
+        } catch (e) {
+            throw new Error(e);
         }
-        return this.userService.createUser(dto);
     }
 
-    async loginUser(dto: UserLoginDto): Promise<any> {
-        let user = await this.userService.findUserByEmail(dto.email);
-        if (!user) {
-            throw new BadRequestException(AppError.USER_NOT_EXIST);
+    async loginUser(dto: UserLoginDto): Promise<AuthUserResponse> {
+        try {
+            let user = await this.userService.findUserByEmail(dto.email);
+            if (!user) {
+                throw new BadRequestException(AppError.USER_NOT_EXIST);
+            }
+            const isValidPassword = await bcrypt.compare(dto.password, user.password);
+            if (!isValidPassword) {
+                throw new BadRequestException(AppError.WRONG_DATA);
+            }
+            user = await this.userService.getPublicUser(dto.email);
+            const token = await this.tokenService.generateJwtToken(user);
+            return {user, token};
+        } catch (e) {
+            throw new Error(e);
         }
-        const isValidPassword = await bcrypt.compare(dto.password, user.password);
-        if (!isValidPassword) {
-            throw new BadRequestException(AppError.WRONG_DATA);
-        }
-        user = await this.userService.getPublicUser(dto.email);
-        const token = await this.tokenService.generateJwtToken(user);
-        return {user, token};
     }
 }

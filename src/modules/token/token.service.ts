@@ -13,7 +13,7 @@ export class TokenService {
         const payload = {user: userData};
         return this.jwtService.sign(payload, {
             secret: this.configService.get("secret_jwt"),
-            expiresIn: this.configService.get("expire_jwt_msec")
+            expiresIn: this.configService.get("expire_jwt_sec")
         });
     }
 }

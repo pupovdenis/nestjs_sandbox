@@ -11,11 +11,11 @@ export class UserService {
     constructor(@InjectModel(User) private readonly userRepository: typeof User) {
     }
 
-    async encrypt(password) {
+    async encrypt(password): Promise<string> {
         return bcrypt.hash(password, 10);
     }
 
-    async getPublicUser(email: string) {
+    async getPublicUser(email: string): Promise<User> {
         return await this.userRepository.findOne({
             rejectOnEmpty: undefined,
             where: {email},
@@ -39,12 +39,12 @@ export class UserService {
         return dto;
     }
 
-    async findUserByEmail(email: string) {
+    async findUserByEmail(email: string): Promise<User> {
         return this.userRepository.findOne({rejectOnEmpty: undefined, where: {email: email}});
     }
 
-    async updateUser(email: string, dto: UpdateUserDto): Promise<UpdateUserDto> {
-        await this.userRepository.update(dto, {where: {email}});
+    async updateUser(id: number, dto: UpdateUserDto): Promise<UpdateUserDto> {
+        await this.userRepository.update({dto}, {where: {id}});
         return dto;
     }
 
