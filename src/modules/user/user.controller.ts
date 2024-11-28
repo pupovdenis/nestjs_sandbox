@@ -1,31 +1,35 @@
-import {Body, Controller, Delete, Patch, Req, UseGuards} from '@nestjs/common';
-import {UserService} from "./user.service";
-import {UpdateUserDto} from "./dto";
-import {JwtAuthGuard} from "../../guards/jwt-guard";
-import {ApiResponse, ApiTags} from "@nestjs/swagger";
+import {Controller, Get} from '@nestjs/common';
+import {Public, Roles, Unprotected} from "nest-keycloak-connect";
 
-@Controller('user')
+@Controller()
 export class UserController {
-    constructor(private readonly userService: UserService) {
+
+    @Get('kc/unprotected')
+    @Unprotected()
+    getNoGuard(): string {
+        return `hello from no guard`;
     }
 
-    @ApiTags("API")
-    @ApiResponse({status: 201, type: UpdateUserDto})
-    @UseGuards(JwtAuthGuard)
-    @Patch()
-    updateUser(@Body() dto: UpdateUserDto, @Req() request): Promise<UpdateUserDto> {
-        const user = request.user;
-        console.log("user from request: ", user)
-        console.log("dto from body: ", dto)
-        return this.userService.updateUser(user.id, dto);
+    @Get('kc/user')
+    @Roles({roles: ['my_user']})
+    getUser(): string {
+        return `hello from user`;
     }
 
-    @ApiTags("API")
-    @ApiResponse({status: 200})
-    @UseGuards(JwtAuthGuard)
-    @Delete()
-    deleteUser(@Req() request): Promise<boolean> {
-        const user = request.user;
-        return this.userService.deleteUser(user.email);
+    @Get('kc/admin')
+    @Roles({roles: ['my_admin']})
+    getAdmin(): string {
+        return `hello from admin`;
+    }
+
+    @Get('kc/all')
+    getAll(): string {
+        return `hello from authenticated`;
+    }
+
+    @Get('kc/public')
+    @Public()
+    getPublic(): string {
+        return `hello from public`;
     }
 }
