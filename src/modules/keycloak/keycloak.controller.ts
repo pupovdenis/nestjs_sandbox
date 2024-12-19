@@ -1,10 +1,38 @@
-import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Post, Req} from '@nestjs/common';
 import {KeycloakService} from './keycloak.service';
-import {Roles} from "nest-keycloak-connect";
+import {Roles, Unprotected} from "nest-keycloak-connect";
 
 @Controller('keycloak/users')
 export class KeycloakController {
     constructor(private readonly keycloakService: KeycloakService) {
+    }
+
+    @Post('introspect')
+    @Unprotected()
+    // @Roles({roles: ['my_admin']}) //or
+    @HttpCode(200)
+    async introspectToken(@Req() req: any, @Body('token') token: string) {
+        try {
+            const introspection = await this.keycloakService.introspectToken(token);
+
+            const user = req.user;
+            const accessToken = req.accessToken;
+            const user_resource_roles = Object.values(user?.resource_access || {})
+                .flatMap((resource: any) => resource.roles || []);
+
+            return {
+                user_preferred_username: user?.preferred_username || "undefined",
+                user_realm_roles: user?.realm_access.roles || [],
+                user_resource_roles: user_resource_roles,
+                token: accessToken,
+                introspection_active: introspection?.active,
+                introspection_username: introspection?.username,
+                introspection_client_id: introspection?.client_id
+            };
+        } catch (error) {
+            console.error('Error introspecting token', error.response?.data || error.message);
+            throw error;
+        }
     }
 
     @Get()

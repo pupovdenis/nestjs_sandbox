@@ -1,5 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
+import axios from "axios";
 
 @Injectable()
 export class KeycloakService {
@@ -167,6 +168,36 @@ export class KeycloakService {
             return {userId: createdUser.id};
         } catch (error) {
             console.error('Error creating user with roles and password:', error);
+            throw error;
+        }
+    }
+
+    async introspectToken(token: string) {
+
+        if (typeof token !== 'string') {
+            console.error('Invalid token type:', typeof token, token);
+            throw new Error('Token must be a string');
+        }
+
+        const introspectionUrl = `http://localhost:8080/realms/geofocus-realm/protocol/openid-connect/token/introspect`;
+
+        try {
+            const response = await axios.post(
+                introspectionUrl,
+                new URLSearchParams({
+                    token: token,
+                    client_id: 'user-manage-client',
+                    client_secret: 'IIRUXyJMTaBZP4yh01bttzZsdMe4CdxM',
+                }),
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                },
+            );
+            return response.data;
+        } catch (error) {
+            console.error('Error introspecting token', error.response?.data || error.message);
             throw error;
         }
     }
