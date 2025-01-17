@@ -115,11 +115,12 @@ export class KeycloakService {
         }
     }
 
-    async createUserWithRolesAndPassword(userData: {
+    async createUserWithRolesAndPasswordAndMiddlename(userData: {
         username: string;
         email?: string;
         firstName?: string;
         lastName?: string;
+        middleName?: string;
         enabled?: boolean;
         password: string;
         roles: string[];
@@ -165,10 +166,26 @@ export class KeycloakService {
                 }
             }
 
+            try {
+                const user = await this.keycloakAdminClient.users.findOne({id: createdUser.id});
+                user.attributes = {
+                    ...user.attributes,
+                    middleName: userData.middleName,
+                };
+                await this.keycloakAdminClient.users.update({id: createdUser.id}, user);
+                console.log(`Middle name updated successfully for user with ID: ${createdUser.id}`);
+            } catch (error) {
+                console.error(`Error adding middle name for user with ID: ${createdUser.id}`, error);
+            }
+
+            console.log(await this.keycloakAdminClient.users.findOne({id: createdUser.id}));
+
             return {userId: createdUser.id};
         } catch (error) {
             console.error('Error creating user with roles and password:', error);
             throw error;
+        } finally {
+            //delete user if created
         }
     }
 

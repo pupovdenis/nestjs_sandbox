@@ -47,8 +47,8 @@ export class KeycloakController {
     }
 
     @Post()
-    async createUserWithRolesAndPassword(@Body() createUserDto: any) {
-        const result = await this.keycloakService.createUserWithRolesAndPassword(createUserDto);
+    async createUserWithRolesAndPasswordAndMiddlename(@Body() createUserDto: any) {
+        const result = await this.keycloakService.createUserWithRolesAndPasswordAndMiddlename(createUserDto);
         return {message: 'User created successfully with roles and password', userId: result.userId};
     }
 
