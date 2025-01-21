@@ -1,6 +1,8 @@
 import {Injectable} from '@nestjs/common';
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import axios from "axios";
+import {ReadUserDto} from "../user/dto/read.user.dto";
+import {UserMapper} from "../user/mapper/user.mapper";
 
 @Injectable()
 export class KeycloakService {
@@ -37,10 +39,11 @@ export class KeycloakService {
         }
     }
 
-    async getUser(userId: string): Promise<any> {
+    async getUser(userId: string): Promise<ReadUserDto> {
         try {
             await this.authenticateAdmin();
-            return await this.keycloakAdminClient.users.findOne({id: userId});
+            const userRepresentation = await this.keycloakAdminClient.users.findOne({id: userId});
+            return UserMapper.toDto(userRepresentation);
         } catch (error) {
             console.error('Error fetching users:', error);
             throw error;
